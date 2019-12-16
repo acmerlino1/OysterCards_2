@@ -18,18 +18,25 @@ describe Oystercard do
     end
 
 
-  describe '#reduce' do
-    it {is_expected.to respond_to(:reduce).with(1).argument}
-  end
-it 'deducts an amount' do
-subject.top_up(20)
-expect{ subject.reduce 3}.to change{ subject.balance }.by -3
-end
+  # describe '#reduce' do
+  #   it {is_expected.to respond_to(:reduce).with(1).argument}
+  # end
+# it 'deducts an amount' do
+# subject.top_up(20)
+# expect{ subject.reduce(3)}.to change{ subject.balance }.by -3
+# end
 
   describe '#touch_in' do
     it 'raise_error if below min amount' do
-      expect {subject.touch_in(@balance)}.to raise_error(Oystercard::ERROR[:min])
+      expect {subject.touch_in}.to raise_error(Oystercard::ERROR[:min])
     end
+
+    it 'reduce card amount by min_charge' do
+      subject.top_up(5)
+      subject.touch_in
+      expect{ subject.touch_out }.to change{ subject.balance }.by(-Oystercard::MIN_CHARGE)
+    end
+
   describe '#in_journey' do
   it 'returns true if in journey' do
     allow(subject).to receive(:in_journey).and_return(true)
@@ -40,6 +47,12 @@ end
     allow(subject).to receive(:in_journey).and_return(false)
     expect(subject.in_journey).to eq(false)
   end
+
+  describe '#touch_out' do
+  it 'reduces by minimum amount' do
+    expect {subject.touch_out}.to change { subject.balance }.by -1
+end
+end
 end
 end
 end
