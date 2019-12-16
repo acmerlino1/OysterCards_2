@@ -21,5 +21,4 @@ class Oystercard
 
     end
 
-
 end
