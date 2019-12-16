@@ -17,16 +17,29 @@ describe Oystercard do
       expect {subject.top_up(@balance)}.to raise_error(Oystercard::ERROR[:max])
     end
 
+
   describe '#reduce' do
     it {is_expected.to respond_to(:reduce).with(1).argument}
   end
-  it 'deducts an amount' do
-  subject.top_up(20)
-  expect{ subject.reduce 3}.to change{ subject.balance }.by -3
-  end
+it 'deducts an amount' do
+subject.top_up(20)
+expect{ subject.reduce 3}.to change{ subject.balance }.by -3
+end
 
   describe '#in_journey' do
-    it { is_expected.to respond_to(:in_journey).with(true)}
+  it 'returns true if in journey' do  
+    allow(subject).to receive(:in_journey).and_return(true)
+    expect(subject.in_journey).to eq(true)
+  end
+
+  it 'returns false if not in journey' do
+    allow(subject).to receive(:in_journey).and_return(false)
+    expect(subject.in_journey).to eq(false)
   end 
 end
 end
+end
+
+
+
+

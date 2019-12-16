@@ -5,6 +5,7 @@ class Oystercard
 
    }
   attr_reader :balance
+  attr_accessor :in_journey
 
     def initialize
       @balance = 0
@@ -18,7 +19,13 @@ class Oystercard
 
     def reduce(amount)
       @balance -= amount
-
     end
 
+    def touch_in
+      @in_journey = true
+    end
+
+    def touch_out
+      @in_journey = false
+    end
 end
