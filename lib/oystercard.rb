@@ -1,5 +1,9 @@
 class Oystercard
+  MAXIMUN = 90
+  ERROR = {
+    max: 'Maximun allowance reached'.freeze,
 
+   }
   attr_reader :balance
 
     def initialize
@@ -7,6 +11,11 @@ class Oystercard
     end
 
     def top_up(amount)
+        fail ERROR[:max] if @balance >= MAXIMUN
+
       @balance += amount
+
+
+
     end
 end
