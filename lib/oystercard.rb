@@ -7,7 +7,7 @@ class Oystercard
     min: 'raise_error if below min amount'
    }
   attr_reader :balance
-  attr_accessor :in_journey
+  attr_reader :entry_station
 
     def initialize
       @balance = 0
@@ -19,22 +19,26 @@ class Oystercard
       @balance += amount
     end
 
-    def touch_in
+    def touch_in(station)
       fail ERROR[:min] if @balance < MINIMUM
-      reduce(MIN_CHARGE)
-      
-      @in_journey = true
-   
+
+      @entry_station = station
+#this was failing due to not having a amount
+#to succcssfully test top_up(1)
+
     end
 
     def touch_out
       reduce(MIN_CHARGE)
-      @in_journey = false
-  
+      @entry_station = nil
     end
-private 
+
+    def in_journey?
+      !!entry_station
+    end
+private
     def reduce(amount)
       @balance -= amount
     end
-  
+
 end

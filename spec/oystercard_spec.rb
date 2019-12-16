@@ -1,6 +1,12 @@
 require 'oystercard'
 
 describe Oystercard do
+  let(:station){ double :station }
+  it 'stores the entry station' do
+    subject.top_up(1)
+    subject.touch_in(station)
+    expect(subject.entry_station).to eq station
+  end
   it 'has a balance of zero' do
     expect(subject.balance).to eq(0)
   end
@@ -28,24 +34,24 @@ describe Oystercard do
 
   describe '#touch_in' do
     it 'raise_error if below min amount' do
-      expect {subject.touch_in}.to raise_error(Oystercard::ERROR[:min])
+      expect {subject.touch_in(station)}.to raise_error(Oystercard::ERROR[:min])
     end
 
     it 'reduce card amount by min_charge' do
       subject.top_up(5)
-      subject.touch_in
+      subject.touch_in(station)
       expect{ subject.touch_out }.to change{ subject.balance }.by(-Oystercard::MIN_CHARGE)
     end
 
   describe '#in_journey' do
   it 'returns true if in journey' do
-    allow(subject).to receive(:in_journey).and_return(true)
-    expect(subject.in_journey).to eq(true)
+    allow(subject).to receive(:entry_station).and_return(true)
+    expect(subject.in_journey?).to eq(true)
   end
 
   it 'returns false if not in journey' do
-    allow(subject).to receive(:in_journey).and_return(false)
-    expect(subject.in_journey).to eq(false)
+    allow(subject).to receive(:entry_station).and_return(false)
+    expect(subject.in_journey?).to eq(false)
   end
 
   describe '#touch_out' do
