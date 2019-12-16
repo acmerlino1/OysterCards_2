@@ -1,8 +1,9 @@
 class Oystercard
   MAXIMUN = 90
+  MINIMUM = 1
   ERROR = {
     max: 'Maximun allowance reached'.freeze,
-
+    min: 'Your broke'
    }
   attr_reader :balance
   attr_accessor :in_journey
@@ -22,6 +23,8 @@ class Oystercard
     end
 
     def touch_in
+      fail ERROR[:min] if @balance < MINIMUM
+
       @in_journey = true
     end
 

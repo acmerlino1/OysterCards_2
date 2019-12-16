@@ -26,8 +26,12 @@ subject.top_up(20)
 expect{ subject.reduce 3}.to change{ subject.balance }.by -3
 end
 
+  describe '#touch_in' do
+    it 'raise_error if below min amount' do
+      expect {subject.touch_in(@balance)}.to raise_error(Oystercard::ERROR[:min])
+    end
   describe '#in_journey' do
-  it 'returns true if in journey' do  
+  it 'returns true if in journey' do
     allow(subject).to receive(:in_journey).and_return(true)
     expect(subject.in_journey).to eq(true)
   end
@@ -35,11 +39,8 @@ end
   it 'returns false if not in journey' do
     allow(subject).to receive(:in_journey).and_return(false)
     expect(subject.in_journey).to eq(false)
-  end 
+  end
 end
 end
 end
-
-
-
-
+end
