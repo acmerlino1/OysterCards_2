@@ -14,8 +14,10 @@ class Oystercard
         fail ERROR[:max] if @balance >= MAXIMUN
 
       @balance += amount
+    end
 
-
+    def reduce(amount)
+      @balance -= amount
 
     end
 end
