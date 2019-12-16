@@ -24,5 +24,9 @@ describe Oystercard do
   subject.top_up(20)
   expect{ subject.reduce 3}.to change{ subject.balance }.by -3
   end
+
+  describe '#in_journey' do
+    it { is_expected.to respond_to(:in_journey).with(true)}
+  end 
 end
 end
