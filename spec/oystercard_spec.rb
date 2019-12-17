@@ -29,47 +29,55 @@ describe Oystercard do
 
 
   # describe '#reduce' do
+  #   before(:each) do
+  #     subject.top_up(Oystercard::MIN_CHARGE)
+  #   end
+    
   #   it {is_expected.to respond_to(:reduce).with(1).argument}
+  
+  #   it 'deducts an amount' do
+  #     expect{ subject.reduce(3)}.to change{ subject.balance }.by -3
+  #   end
   # end
-# it 'deducts an amount' do
-# subject.top_up(20)
-# expect{ subject.reduce(3)}.to change{ subject.balance }.by -3
-# end
 
   describe '#touch_in' do
 
     it 'is initially not in a journey' do
       expect(subject).not_to be_in_journey
     end
-
-    it 'can touch in' do
-      subject.top_up(Oystercard::MIN_CHARGE)
-      subject.touch_in
-      expect(subject).to be_in_journey
-    end
-
+    
     it 'raise_error if below min amount' do
       expect {subject.touch_in}.to raise_error(Oystercard::ERROR[:min])
     end
+  
+    describe 'top up card before tests' do
+      before(:each) do
+          subject.top_up(Oystercard::MIN_CHARGE)
+      end
 
-    it 'reduce card amount by min_charge' do
-      subject.top_up(5)
-      subject.touch_in
-      expect{ subject.touch_out }.to change{ subject.balance }.by(-Oystercard::MIN_CHARGE)
+      it 'can touch in' do
+        subject.touch_in
+        expect(subject).to be_in_journey
+      end
+
+      it 'reduce card amount by min_charge' do
+        subject.touch_in
+        expect{ subject.touch_out }.to change{ subject.balance }.by(-Oystercard::MIN_CHARGE)
+      end 
     end
   end
 
-  # describe '#in_journey' do
-  #   it 'returns true if in journey' do
-  #     allow(subject).to receive(:entry_station).and_return(true)
-  #     expect(subject.in_journey?).to eq(true)
-  #   end
+  describe '#in_journey' do
+    it 'returns true if in journey' do
+      subject.top_up(Oystercard::MIN_CHARGE)
+      subject.touch_in
+      expect(subject.in_journey?).to eq(true)
+    end
 
-  #   it 'returns false if not in journey' do
-  #     allow(subject).to receive(:entry_station).and_return(false)
-  #     expect(subject.in_journey?).to eq(false)
-  #   end
-  # end
+    it 'returns false if not in journey' do
+      expect(subject.in_journey?).to eq(false)
+    end
+  end
 
   describe '#touch_out' do
     it 'reduces by minimum amount' do

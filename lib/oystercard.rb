@@ -10,6 +10,7 @@ class Oystercard
   attr_reader :balance, :entry_station, :in_journey
 
     def initialize
+      @in_journey = false
       @balance = 0
     end
 
@@ -31,14 +32,14 @@ class Oystercard
 
     def touch_out
       reduce(MIN_CHARGE)
-      @entry_station = nil
+      # @entry_station = nil
     end
 
     def in_journey?
-      false # !!entry_station
+      @in_journey # !!entry_station
     end
 
-    # private
+    private
     
     def reduce(amount)
       @balance -= amount
